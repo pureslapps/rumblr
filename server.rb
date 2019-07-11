@@ -21,11 +21,13 @@ get "/login" do
 end
 
 post "/login" do
-  username = params[:username]
+  email = params[:email]
   given_password = params[:password]
-  user = User.find_by(username: username)
+  user = User.find_by(email: email)
+  session[:user] = user
+  redirect "/"
 
-  p username
+  p email
   p given_password
 end
 
@@ -34,11 +36,12 @@ get "/signup" do
 end
 
 post "/signup" do
-  user = User.new(username: params[:username], password: params[:password])
+  user = User.new(params)
   user.save
   redirect "/"
 end
 
 post "/logout" do
-
+  session.clear
+  redirect "/"
 end
