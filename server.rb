@@ -5,6 +5,7 @@ enable "sessions"
 class User < ActiveRecord::Base
 end
 
+
 #LOCAL
 ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: "./db.sqlite3")
 #HEROKU
@@ -44,4 +45,24 @@ end
 post "/logout" do
   session.clear
   redirect "/"
+end
+
+post "/delete" do
+  email = params[:email]
+  user = User.find_by(email: session[:user].email)
+  user.destroy
+  session.clear
+  redirect "/success"
+end
+
+get "/success" do
+  erb :success
+end
+
+get "/myblog" do
+  erb :myblog
+end
+
+post "/myblog" do
+
 end
