@@ -5,6 +5,9 @@ enable "sessions"
 class User < ActiveRecord::Base
 end
 
+class Post <ActiveRecord::Base
+end
+
 
 #LOCAL
 ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: "./db.sqlite3")
@@ -65,4 +68,12 @@ end
 
 post "/myblog" do
 
+end
+
+post "/dashboard" do
+  user = User.find_by(id: session[:user])
+   @post = Post.new(title: params[:title], maintext: params[:maintext], user_ID: session[:user])
+   @post.save
+   @post.update(creator: user.first_name)
+   redirect "/dashboard"
 end
